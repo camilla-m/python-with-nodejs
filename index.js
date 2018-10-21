@@ -1,15 +1,14 @@
-var express = require('express');
-var app = express();
-app.listen(3000, function () {
-  console.log('rodando na porta 3000');
-})
- app.get('/python', chamandoPython);
-function chamandoPython(req, res) {
-  var spawn = require('child_process').spawn;
-  var process = spawn('python', ['./script.py', 
-  req.query.firstname, 
-  req.query.lastname]);
-  process.stdout.on('data', function (data) {
-    res.send(data.toString());
-  });
-}
+var PythonShell = require('python-shell');
+
+var options = {
+  mode: 'text',
+  encoding: 'utf8',
+  pythonOptions: ['-u'],
+  scriptPath: './',
+  args: ["Camilla","Martins"]
+};
+
+var test = new PythonShell('script.py', options);
+test.on('message', function(message) {
+  console.log(message);
+});
